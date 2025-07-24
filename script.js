@@ -77,8 +77,9 @@ function playSound(sounds) {
 function playComposition(songArray) {
   let wait = 0;
   for (let songItem of songArray) {
+    const key = `key${songItem.toLowerCase()}`;
     setTimeout(() => {
-      playSound(`key${songItem}`);
+      playSound(key);
     }, wait);
     wait += 250;
   }
