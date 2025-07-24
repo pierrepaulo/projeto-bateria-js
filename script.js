@@ -36,11 +36,14 @@ document.querySelector(".composer button").addEventListener("click", () => {
 });
 
 //Tocar som
-function playSound(sound) {
+function playSound(sounds) {
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
   if (isTypingName) return;
 
-  const originalAudio = document.querySelector(`#s_${sound}`);
-  const keyElement = document.querySelector(`div[data-key='${sound}']`);
+  const originalAudio = document.querySelector(`#s_${sounds}`);
+  const keyElement = document.querySelector(`div[data-key='${sounds}']`);
 
   if (originalAudio) {
     const audioClone = originalAudio.cloneNode(); //clona o áudio
@@ -64,7 +67,7 @@ function playSound(sound) {
 
   if (isRecording) {
     recordedSequence.push({
-      key: sound,
+      key: sounds,
       time: Date.now() - recordStartTime,
     });
   }
