@@ -43,7 +43,7 @@ function playSound(sound) {
   const keyElement = document.querySelector(`div[data-key='${sound}']`);
 
   if (originalAudio) {
-    const audioClone = originalAudio.cloneNode(); // 🔁 clona o áudio
+    const audioClone = originalAudio.cloneNode(); //clona o áudio
     const source = audioCtx.createMediaElementSource(audioClone);
 
     source.connect(analyser);
@@ -52,7 +52,7 @@ function playSound(sound) {
     audioClone.currentTime = 0;
     audioClone.play();
 
-    visualize(); // mostra as ondas
+    visualize(); //mostra as ondas
   }
 
   if (keyElement) {
