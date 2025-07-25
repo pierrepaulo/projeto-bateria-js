@@ -4,63 +4,119 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bateria</title>
+    <title>Bateria Online</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Bateria</h1>
+    <header>
+      <h1>Bateria Online</h1>
+    </header>
 
-    <div class="keys">
-      <div data-key="keyq" class="key">Q</div>
-      <div data-key="keyw" class="key">W</div>
-      <div data-key="keye" class="key">E</div>
+    <main class="main-layout">
+      <section class="controls-section">
+        <div class="composer">
+          <label for="input-composition" class="sr-only"
+            >Faça uma composição...</label
+          >
+          <input
+            type="text"
+            id="input-composition"
+            placeholder="Faça uma composição..."
+            aria-label="Campo para inserir a composição musical"
+          />
+          <button id="play-composition-btn" aria-label="Tocar composição">
+            Tocar
+          </button>
+        </div>
 
-      <div data-key="keya" class="key">A</div>
-      <div data-key="keys" class="key">S</div>
-      <div data-key="keyd" class="key">D</div>
+        <div class="recorder">
+          <div class="rec-row">
+            <button id="start-record-btn" aria-label="Iniciar gravação">
+              <span>🔴</span>Gravar
+            </button>
+            <button id="stop-record-btn" disabled aria-label="Parar gravação">
+              <span>⏹️</span>Parar
+            </button>
+          </div>
+          <button
+            id="play-record-btn"
+            disabled
+            aria-label="Reproduzir gravação"
+          >
+            <span>▶️</span>Reproduzir
+          </button>
+        </div>
 
-      <div data-key="keyz" class="key">Z</div>
-      <div data-key="keyx" class="key">X</div>
-      <div data-key="keyc" class="key">C</div>
-    </div>
-    <div class="composer">
-      <input type="text" id="input" placeholder="Faça uma composição..." />
-      <button>Tocar</button>
-    </div>
+        <div class="save-area">
+          <label for="save-name-input" class="sr-only"
+            >Nome da composição</label
+          >
+          <input
+            type="text"
+            id="save-name-input"
+            placeholder="Nome da composição"
+            aria-label="Campo para nomear a composição a ser salva"
+          />
+          <button id="save-btn" aria-label="Salvar composição">
+            <span>💾</span>Salvar
+          </button>
+        </div>
 
-    <div class="recorder">
-      <button id="startRecord">Gravar</button>
-      <button id="stopRecord" disabled>Parar</button>
-      <button id="playRecord" disabled>Reproduzir</button>
-    </div>
+        <div class="load-area">
+          <label for="saved-list-select" class="sr-only"
+            >Escolha uma composição</label
+          >
+          <select
+            id="saved-list-select"
+            aria-label="Lista de composições salvas"
+          >
+            <option disabled selected>Escolha uma composição</option>
+          </select>
+          <button id="load-play-btn" aria-label="Tocar composição salva">
+            Tocar salva
+          </button>
+          <button id="delete-btn" aria-label="Deletar composição">
+            <span>🗑️</span>Deletar
+          </button>
+        </div>
+      </section>
 
-    <div class="save-area">
-      <input type="text" id="saveName" placeholder="Nome da composição" />
-      <button id="saveBtn">Salvar</button>
-    </div>
+      <section class="pads-section">
+        <div class="keys">
+          <button data-key="keyq" class="key" aria-label="Tecla Q">Q</button>
+          <button data-key="keyw" class="key" aria-label="Tecla W">W</button>
+          <button data-key="keye" class="key" aria-label="Tecla E">E</button>
+          <button data-key="keyr" class="key" aria-label="Tecla R">R</button>
 
-    <div class="load-area">
-      <select id="savedList">
-        <option disabled selected>Escolha uma composição</option>
-      </select>
-      <button id="loadPlay">Tocar salva</button>
-      <button id="deleteBtn">Deletar</button>
-    </div>
+          <button data-key="keya" class="key" aria-label="Tecla A">A</button>
+          <button data-key="keys" class="key" aria-label="Tecla S">S</button>
+          <button data-key="keyd" class="key" aria-label="Tecla D">D</button>
+          <button data-key="keyf" class="key" aria-label="Tecla F">F</button>
 
-    <canvas id="visualizer" width="600" height="100"></canvas>
+          <button data-key="keyt" class="key" aria-label="Tecla T">T</button>
+          <button data-key="keyy" class="key" aria-label="Tecla Y">Y</button>
+          <button data-key="keyu" class="key" aria-label="Tecla U">U</button>
+          <button data-key="keyi" class="key" aria-label="Tecla I">I</button>
 
-    <audio id="s_keyq" src="sounds/keyq.wav"></audio>
-    <audio id="s_keyw" src="sounds/keyw.wav"></audio>
-    <audio id="s_keye" src="sounds/keye.wav"></audio>
-    <audio id="s_keya" src="sounds/keya.wav"></audio>
-    <audio id="s_keys" src="sounds/keys.wav"></audio>
-    <audio id="s_keyd" src="sounds/keyd.wav"></audio>
-    <audio id="s_keyz" src="sounds/keyz.wav"></audio>
-    <audio id="s_keyx" src="sounds/keyx.wav"></audio>
-    <audio id="s_keyc" src="sounds/keyc.wav"></audio>
+          <button data-key="keyh" class="key" aria-label="Tecla H">H</button>
+          <button data-key="keyj" class="key" aria-label="Tecla J">J</button>
+          <button data-key="keyk" class="key" aria-label="Tecla K">K</button>
+          <button data-key="keyl" class="key" aria-label="Tecla L">L</button>
+        </div>
+      </section>
+    </main>
+
+    <canvas
+      id="visualizer"
+      width="600"
+      height="100"
+      aria-label="Visualizador de áudio"
+    ></canvas>
 
     <script type="module" src="scripts/script.js"></script>
 
-    <footer>Criado por Pierre Paulo</footer>
+    <footer>
+      <p>Criado por Pierre Paulo</p>
+    </footer>
   </body>
 </html>

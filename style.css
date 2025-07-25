@@ -1,150 +1,428 @@
+/* ===== CSS VARIABLES ===== */
+:root {
+  --color-primary: #ffc107;
+  --color-primary-dark: #111;
+  --color-bg-main: #333;
+  --color-bg-dark: #222;
+  --color-bg-darker: #1a1a1a;
+  --color-bg-light: #2c2c2c;
+  --color-border: #444;
+  --color-border-light: #555;
+  --color-text-light: #fff;
+  --color-text-muted: #ddd;
+  --color-danger: #f55;
+  --color-success: #0f0;
+  --color-recording: #f00;
+
+  --shadow-default: 0 4px 15px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 6px 20px rgba(255, 255, 255, 0.15);
+  --shadow-active: 0 0 25px rgba(255, 193, 7, 0.8);
+  --shadow-inset: inset 0 0 8px rgba(255, 255, 255, 0.05);
+
+  --transition-default: all 0.2s ease-in-out;
+  --border-radius-default: 12px;
+  --border-radius-small: 8px;
+  --border-radius-medium: 10px;
+
+  --gap-small: 10px;
+  --gap-medium: 16px;
+  --gap-large: 20px;
+  --gap-xlarge: 40px;
+}
+
+/* ===== RESET & BASE STYLES ===== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   display: flex;
   min-height: 100vh;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #333;
+  background-color: var(--color-bg-main);
   font-family: Arial, Helvetica, sans-serif;
+  color: var(--color-text-light);
 }
 
-h1 {
-  color: #fff;
-  margin-bottom: 20px;
+/* ===== ACCESSIBILITY ===== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
+
+/* ===== HEADER ===== */
+header h1 {
+  color: var(--color-text-light);
+  margin-bottom: var(--gap-large);
+  font-size: 2rem;
+  text-align: center;
+}
+
+/* ===== MAIN LAYOUT ===== */
+.main-layout {
+  display: flex;
+  gap: var(--gap-xlarge);
+  align-items: flex-start;
+  margin-top: var(--gap-large);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.controls-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-large);
+  max-width: 280px;
+  flex: 1;
+  min-width: 280px;
+}
+
+.pads-section {
+  flex: 2;
+  min-width: 320px;
+}
+
+/* ===== DRUM PADS ===== */
 .keys {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap-medium);
 }
+
 .key {
-  width: 80px;
-  height: 80px;
-  border: 2px solid #fff;
-  color: #fff;
+  width: 100px;
+  height: 100px;
+  border-radius: var(--border-radius-default);
+  background-color: var(--color-bg-dark);
+  border: 2px solid var(--color-border);
+  box-shadow: var(--shadow-default);
+  color: var(--color-text-muted);
+  font-size: 28px;
+  font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 30px;
-  font-weight: bold;
-}
-.key.active {
-  border-color: #ff0;
-  color: #ff0;
-  background-color: rgba(255, 255, 0, 0.1);
-  transform: scale(1.05);
-  transition: transform 0.1s;
+  transition: var(--transition-default);
+  cursor: pointer;
+  user-select: none;
 }
 
-.composer {
-  width: 260px;
-  margin-top: 20px;
+.key:hover {
+  background-color: var(--color-bg-light);
+  box-shadow: var(--shadow-hover);
 }
-.composer #input {
+
+.key:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.key.active {
+  background-color: var(--color-primary);
+  color: var(--color-primary-dark);
+  box-shadow: var(--shadow-active);
+  transform: scale(1.05);
+}
+
+/* ===== COMPOSER SECTION ===== */
+.composer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--gap-small);
+}
+
+.composer input {
   width: 100%;
   outline: none;
-  font-size: 17px;
-  padding: 10px 15px;
+  font-size: 18px;
+  padding: 14px 16px;
+  background-color: var(--color-bg-darker);
+  border: 2px solid var(--color-border);
+  color: var(--color-text-light);
+  border-radius: var(--border-radius-small);
+  box-shadow: var(--shadow-inset);
+  transition: var(--transition-default);
 }
+
+.composer input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 8px rgba(255, 193, 7, 0.5);
+}
+
+/* ===== BUTTONS ===== */
+.composer button,
+.recorder button,
+.save-area button,
+.load-area button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: var(--border-radius-medium);
+  border: 2px solid var(--color-border-light);
+  background-color: var(--color-bg-darker);
+  color: var(--color-primary);
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transition: var(--transition-default);
+}
+
 .composer button {
   width: 100%;
-  height: 40px;
-  background: none;
-  border: 2px solid #fff;
-  color: #fff;
-  font-size: 16px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-.composer button:hover {
-  background-color: rgba(0, 0, 0, 0.2);
+  height: 50px;
+  font-size: 18px;
+  border-radius: var(--border-radius-default);
+  border-color: var(--color-border);
+  background-color: var(--color-bg-dark);
 }
 
-footer {
-  margin-top: 20px;
-  color: #fff;
-  font-size: 13px;
+.composer button:hover,
+.recorder button:hover,
+.save-area button:hover,
+.load-area button:hover {
+  background-color: var(--color-bg-light);
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+  color: var(--color-text-light);
 }
 
+.composer button:active,
+.recorder button:active,
+.save-area button:active,
+.load-area button:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+}
+
+.composer button:focus,
+.recorder button:focus,
+.save-area button:focus,
+.load-area button:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ===== RECORDER SECTION ===== */
 .recorder {
-  margin-top: 20px;
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: var(--gap-small);
+  width: 100%;
 }
 
-.recorder button {
-  padding: 10px 15px;
-  font-size: 16px;
-  background: none;
-  border: 2px solid #fff;
-  color: #fff;
-  cursor: pointer;
+.rec-row {
+  display: flex;
+  gap: var(--gap-small);
+  width: 100%;
 }
 
-.recorder button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.rec-row button {
+  flex: 1;
 }
 
-#startRecord.recording {
-  border-color: #f00;
-  color: #f00;
+#play-record-btn {
+  width: 100%;
+}
+
+#start-record-btn.recording {
+  border-color: var(--color-recording);
+  color: var(--color-recording);
   font-weight: bold;
 }
 
-#playRecord.playing {
-  border-color: #0f0;
-  color: #0f0;
+#play-record-btn.playing {
+  border-color: var(--color-success);
+  color: var(--color-success);
   font-weight: bold;
 }
 
+/* ===== SAVE & LOAD SECTIONS ===== */
 .save-area,
 .load-area {
-  margin-top: 20px;
   display: flex;
-  gap: 10px;
+  gap: var(--gap-small);
+  width: 100%;
+  align-items: stretch;
+  flex-wrap: wrap; /* Adicionado para permitir que os itens quebrem a linha */
 }
 
 .save-area input,
 .load-area select {
-  padding: 8px;
-  font-size: 14px;
-  width: 180px;
+  padding: 12px 14px;
+  font-size: 16px;
+  flex: 1;
+  min-width: 150px; /* Adicionado para garantir que o input/select não fique muito pequeno */
+  background-color: var(--color-bg-darker);
+  border: 2px solid var(--color-border);
+  color: var(--color-primary);
+  border-radius: var(--border-radius-medium);
+  box-shadow: var(--shadow-inset);
+  transition: var(--transition-default);
+}
+
+.save-area input:focus,
+.load-area select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
 }
 
 .save-area button,
 .load-area button {
   padding: 8px 12px;
   font-size: 14px;
-  border: 2px solid #fff;
+  border: 2px solid var(--color-text-light);
   background: none;
-  color: #fff;
-  cursor: pointer;
+  color: var(--color-text-light);
+  flex-shrink: 0;
 }
 
-.save-area button:hover,
-.load-area button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+#delete-btn {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
 }
 
+#delete-btn:hover {
+  background-color: rgba(255, 85, 85, 0.1);
+}
+
+/* ===== VISUALIZER ===== */
 #visualizer {
   margin-top: 30px;
-  background-color: #111;
-  border: 2px solid #fff;
-}
-#deleteBtn {
-  padding: 8px 12px;
-  font-size: 14px;
-  border: 2px solid #f55;
-  background: none;
-  color: #f55;
-  cursor: pointer;
+  background-color: var(--color-primary-dark);
+  border: 2px solid var(--color-text-light);
+  border-radius: var(--border-radius-small);
 }
 
-#deleteBtn:hover {
-  background-color: rgba(255, 85, 85, 0.1);
+/* ===== FOOTER ===== */
+footer {
+  margin-top: var(--gap-large);
+  color: var(--color-text-light);
+  font-size: 13px;
+  text-align: center;
+}
+
+footer p {
+  margin: 0;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .main-layout {
+    flex-direction: column;
+    gap: var(--gap-large);
+    align-items: center;
+  }
+
+  .controls-section {
+    max-width: 100%;
+    width: 100%;
+    order: 2;
+  }
+
+  .pads-section {
+    order: 1;
+    width: 100%;
+  }
+
+  .keys {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gap-small);
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .key {
+    width: 70px;
+    height: 70px;
+    font-size: 20px;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  #visualizer {
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  .save-area,
+  .load-area {
+    flex-direction: column;
+  }
+
+  .rec-row {
+    flex-direction: column;
+  }
+
+  .key {
+    width: 60px;
+    height: 60px;
+    font-size: 18px;
+  }
+
+  .keys {
+    gap: 8px;
+    max-width: 280px;
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.key.active {
+  animation: pulse 0.3s ease-in-out;
+}
+
+/* ===== HIGH CONTRAST MODE ===== */
+@media (prefers-contrast: high) {
+  :root {
+    --color-bg-main: #000;
+    --color-bg-dark: #111;
+    --color-bg-light: #333;
+    --color-border: #666;
+    --color-text-light: #fff;
+  }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .key.active {
+    animation: none;
+    transform: none;
+  }
 }
