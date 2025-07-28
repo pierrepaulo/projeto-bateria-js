@@ -20,13 +20,13 @@ export const soundMap = {
   keyt: "sounds/keyt.wav",
   keyy: "sounds/keyy.wav",
   keyu: "sounds/keyu.wav",
-  keyi: "sounds/keyi.wav",
+  keyi: "sounds/brazilian-funk-detuned-snare.wav",
 
   // Quarta fileira (H, J, K, L)
-  keyh: "sounds/keyh.wav",
-  keyj: "sounds/keyj.wav",
-  keyk: "sounds/keyk.wav",
-  keyl: "sounds/keyl.wav",
+  keyh: "sounds/brazilian-funk-kick-hard.wav",
+  keyj: "sounds/brazilian-funk-detuned-snare.wav",
+  keyk: "sounds/brazilian-funk-cowbell_C.wav",
+  keyl: "sounds/jama-type-brazilian-funk-cowbell_146bpm_B_major.wav",
 };
 
 /**
