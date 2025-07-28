@@ -308,6 +308,110 @@ header h1 {
   border: 2px solid var(--color-text-light);
   border-radius: var(--border-radius-small);
 }
+/* ===== KEY MAPPING SECTION ===== */
+.key-mapping-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-medium);
+  width: 100%;
+  margin-top: var(--gap-large);
+  padding: var(--gap-large);
+  background-color: var(--color-bg-darker);
+  border-radius: var(--border-radius-default);
+  box-shadow: var(--shadow-default);
+}
+
+.key-mapping-section h2 {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  margin-bottom: var(--gap-small);
+  text-align: center;
+}
+
+#key-mapping-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--gap-small);
+  margin-bottom: var(--gap-medium);
+}
+
+.key-mapping-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  background-color: var(--color-bg-dark);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+}
+
+.key-mapping-item label {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.key-mapping-item input {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  text-align: center;
+  background-color: var(--color-bg-light);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--border-radius-small);
+  color: var(--color-text-light);
+  text-transform: uppercase;
+}
+
+.key-mapping-item input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 5px rgba(255, 193, 7, 0.5);
+}
+
+#save-key-mapping-btn,
+#reset-key-mapping-btn {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: var(--border-radius-medium);
+  border: 2px solid var(--color-border-light);
+  background-color: var(--color-bg-dark);
+  color: var(--color-primary);
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transition: var(--transition-default);
+  margin-top: var(--gap-small);
+}
+
+#save-key-mapping-btn:hover,
+#reset-key-mapping-btn:hover {
+  background-color: var(--color-bg-light);
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+  color: var(--color-text-light);
+}
+
+#reset-key-mapping-btn {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+#reset-key-mapping-btn:hover {
+  background-color: rgba(255, 85, 85, 0.1);
+}
+
+@media (max-width: 768px) {
+  .key-mapping-section {
+    padding: var(--gap-medium);
+  }
+}
+
+@media (max-width: 480px) {
+  #key-mapping-controls {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* ===== FOOTER ===== */
 footer {
@@ -320,7 +424,10 @@ footer {
 footer p {
   margin: 0;
 }
-
+footer a {
+  text-decoration: none;
+  color: #ddd;
+}
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
   .main-layout {

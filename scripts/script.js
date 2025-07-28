@@ -9,8 +9,9 @@ import { soundMap } from "./sounds.js";
 const CONFIG = {
   COMPOSITION_DELAY: 250, // ms entre cada nota na composição
   KEY_ACTIVE_DURATION: 300, // ms que a tecla fica ativa
-  PLAYBACK_END_DELAY: 300, // ms de delay após o fim da reprodução
+  PLAYBACK_END_DELAY: 300, // ms de delay apos o fim da reprodução
   STORAGE_PREFIX: "comp_", // prefixo para localStorage
+  KEY_MAPPING_STORAGE: "key_mapping", // chave para mapeamento customizado
 };
 
 // ===== ESTADO DA APLICAÇÃO =====
@@ -21,6 +22,9 @@ const AppState = {
   isVisualizing: false,
   recordStartTime: 0,
   recordedSequence: [],
+  customKeyMapping: {}, // mapeamento customizado de teclas
+  isWaitingForKey: false, // indica se está aguardando uma tecla para mapeamento
+  currentMappingPad: null, // pad atual sendo mapeado
 };
 
 // ===== ELEMENTOS DO DOM =====
@@ -44,6 +48,11 @@ const DOMElements = {
 
   // Teclas
   keys: document.querySelectorAll(".key"),
+
+  // Customização de Mapeamento
+  keyMappingControls: document.getElementById("key-mapping-controls"),
+  saveKeyMappingBtn: document.getElementById("save-key-mapping-btn"),
+  resetKeyMappingBtn: document.getElementById("reset-key-mapping-btn"),
 };
 
 // ===== CONFIGURAÇÃO DE ÁUDIO =====
@@ -118,6 +127,241 @@ const Utils = {
   isValidString(str) {
     return str && str.trim().length > 0;
   },
+
+  /**
+   * Converte código de tecla para letra legível
+   * @param {string} keyCode - Código da tecla (ex: "keyq")
+   * @returns {string} - Letra maiúscula (ex: "Q")
+   */
+  keyCodeToLetter(keyCode) {
+    return keyCode.replace("key", "").toUpperCase();
+  },
+
+  /**
+   * Converte letra para código de tecla
+   * @param {string} letter - Letra (ex: "Q")
+   * @returns {string} - Código da tecla (ex: "keyq")
+   */
+  letterToKeyCode(letter) {
+    return `key${letter.toLowerCase()}`;
+  },
+};
+
+// ===== GERENCIADOR DE MAPEAMENTO DE TECLAS =====
+const KeyMappingManager = {
+  /**
+   * Inicializa o sistema de mapeamento de teclas
+   */
+  init() {
+    this.loadCustomMapping();
+    this.createMappingInterface();
+    this.setupMappingEvents();
+  },
+
+  /**
+   * Carrega mapeamento customizado do localStorage
+   */
+  loadCustomMapping() {
+    try {
+      const saved = localStorage.getItem(CONFIG.KEY_MAPPING_STORAGE);
+      if (saved) {
+        AppState.customKeyMapping = JSON.parse(saved);
+      } else {
+        // Usa mapeamento padrão se não houver customização
+        this.resetToDefaultMapping();
+      }
+    } catch (error) {
+      console.error("Erro ao carregar mapeamento:", error);
+      this.resetToDefaultMapping();
+    }
+  },
+
+  /**
+   * Salva mapeamento customizado no localStorage
+   */
+  saveCustomMapping() {
+    try {
+      localStorage.setItem(
+        CONFIG.KEY_MAPPING_STORAGE,
+        JSON.stringify(AppState.customKeyMapping)
+      );
+      Utils.showSuccess("Mapeamento de teclas salvo com sucesso!");
+      this.updatePadLabels();
+    } catch (error) {
+      console.error("Erro ao salvar mapeamento:", error);
+      Utils.showError("Erro ao salvar mapeamento de teclas.");
+    }
+  },
+
+  /**
+   * Reseta para o mapeamento padrão
+   */
+  resetToDefaultMapping() {
+    AppState.customKeyMapping = {
+      keyq: "keyq",
+      keyw: "keyw",
+      keye: "keye",
+      keyr: "keyr",
+      keya: "keya",
+      keys: "keys",
+      keyd: "keyd",
+      keyf: "keyf",
+      keyt: "keyt",
+      keyy: "keyy",
+      keyu: "keyu",
+      keyi: "keyi",
+      keyh: "keyh",
+      keyj: "keyj",
+      keyk: "keyk",
+      keyl: "keyl",
+    };
+  },
+
+  /**
+   * Cria a interface de mapeamento de teclas
+   */
+  createMappingInterface() {
+    if (!DOMElements.keyMappingControls) return;
+
+    DOMElements.keyMappingControls.innerHTML = "";
+
+    // Nomes dos instrumentos para cada pad
+    const instrumentNames = {
+      keyq: "1",
+      keyw: "2",
+      keye: "3",
+      keyr: "4",
+      keya: "5",
+      keys: "6",
+      keyd: "7",
+      keyf: "8",
+      keyt: "9",
+      keyy: "10",
+      keyu: "11",
+      keyi: "12",
+      keyh: "13",
+      keyj: "14",
+      keyk: "15",
+      keyl: "16",
+    };
+
+    Object.keys(soundMap).forEach((padKey) => {
+      const mappingItem = document.createElement("div");
+      mappingItem.className = "key-mapping-item";
+
+      const label = document.createElement("label");
+      label.textContent = instrumentNames[padKey] || padKey.toUpperCase();
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.maxLength = 1;
+      input.value = Utils.keyCodeToLetter(
+        AppState.customKeyMapping[padKey] || padKey
+      );
+      input.dataset.padKey = padKey;
+      input.addEventListener("focus", () =>
+        this.startKeyCapture(padKey, input)
+      );
+      input.addEventListener("blur", () => this.stopKeyCapture());
+      input.addEventListener("keydown", (e) =>
+        this.handleKeyCapture(e, padKey, input)
+      );
+
+      mappingItem.appendChild(label);
+      mappingItem.appendChild(input);
+      DOMElements.keyMappingControls.appendChild(mappingItem);
+    });
+  },
+
+  /**
+   * Configura eventos para os botões de mapeamento
+   */
+  setupMappingEvents() {
+    if (DOMElements.saveKeyMappingBtn) {
+      DOMElements.saveKeyMappingBtn.addEventListener("click", () => {
+        this.saveCustomMapping();
+      });
+    }
+
+    if (DOMElements.resetKeyMappingBtn) {
+      DOMElements.resetKeyMappingBtn.addEventListener("click", () => {
+        if (
+          confirm("Tem certeza que deseja resetar o mapeamento para o padrão?")
+        ) {
+          this.resetToDefaultMapping();
+          this.createMappingInterface();
+          this.updatePadLabels();
+          Utils.showSuccess("Mapeamento resetado para o padrão!");
+        }
+      });
+    }
+  },
+
+  /**
+   * Inicia captura de tecla para um pad específico
+   */
+  startKeyCapture(padKey, input) {
+    AppState.isWaitingForKey = true;
+    AppState.currentMappingPad = padKey;
+    input.placeholder = "Pressione uma tecla...";
+    input.style.backgroundColor = "var(--color-primary)";
+    input.style.color = "var(--color-primary-dark)";
+  },
+
+  stopKeyCapture() {
+    AppState.isWaitingForKey = false;
+    AppState.currentMappingPad = null;
+
+    // Restaura estilo dos inputs
+    const inputs = DOMElements.keyMappingControls.querySelectorAll("input");
+    inputs.forEach((input) => {
+      input.placeholder = "";
+      input.style.backgroundColor = "";
+      input.style.color = "";
+    });
+  },
+
+  handleKeyCapture(event, padKey, input) {
+    if (!AppState.isWaitingForKey) return;
+
+    event.preventDefault();
+
+    const key = event.key.toLowerCase();
+    if (key.length === 1 && key.match(/[a-z]/)) {
+      const newKeyCode = Utils.letterToKeyCode(key);
+
+      const existingPad = Object.keys(AppState.customKeyMapping).find(
+        (pad) => AppState.customKeyMapping[pad] === newKeyCode && pad !== padKey
+      );
+
+      if (existingPad) {
+        Utils.showError(
+          `A tecla ${key.toUpperCase()} já está sendo usada por outro pad!`
+        );
+        return;
+      }
+
+      AppState.customKeyMapping[padKey] = newKeyCode;
+      input.value = key.toUpperCase();
+      this.stopKeyCapture();
+    }
+  },
+
+  updatePadLabels() {
+    DOMElements.keys.forEach((keyElement) => {
+      const padKey = keyElement.getAttribute("data-key");
+      const mappedKey = AppState.customKeyMapping[padKey];
+      if (mappedKey) {
+        keyElement.textContent = Utils.keyCodeToLetter(mappedKey);
+      }
+    });
+  },
+
+  getPadForKey(keyCode) {
+    return Object.keys(AppState.customKeyMapping).find(
+      (padKey) => AppState.customKeyMapping[padKey] === keyCode
+    );
+  },
 };
 
 // ===== GERENCIADOR DE SONS =====
@@ -127,11 +371,14 @@ const SoundManager = {
    * @param {string} keyCode - Código da tecla
    */
   async playSound(keyCode) {
-    if (AppState.isTypingName) return;
+    if (AppState.isTypingName || AppState.isWaitingForKey) return;
+
+    // Usa mapeamento customizado para encontrar o pad correto
+    const padKey = KeyMappingManager.getPadForKey(keyCode) || keyCode;
 
     await AudioManager.resumeContext();
 
-    const audioSrc = soundMap[keyCode];
+    const audioSrc = soundMap[padKey];
     if (!audioSrc) return;
 
     try {
@@ -149,8 +396,8 @@ const SoundManager = {
       console.error("Erro ao reproduzir som:", error);
     }
 
-    this.activateKey(keyCode);
-    this.recordKeyPress(keyCode);
+    this.activateKey(padKey);
+    this.recordKeyPress(padKey);
   },
 
   /**
@@ -548,6 +795,7 @@ const App = {
       AudioManager.init();
       EventManager.init();
       StorageManager.updateSavedList();
+      KeyMappingManager.init();
 
       console.log("Bateria Online inicializada com sucesso!");
     } catch (error) {
@@ -565,4 +813,10 @@ if (document.readyState === "loading") {
 }
 
 // Exporta para uso em outros módulos se necessário
-export { SoundManager, CompositionManager, StorageManager, Visualizer };
+export {
+  SoundManager,
+  CompositionManager,
+  StorageManager,
+  Visualizer,
+  KeyMappingManager,
+};
