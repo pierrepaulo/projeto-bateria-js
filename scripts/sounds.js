@@ -24,7 +24,7 @@ export const soundMap = {
 
   // Quarta fileira (H, J, K, L)
   keyh: "sounds/brazilian-funk-kick-hard.wav",
-  keyj: "sounds/brazilian-funk-detuned-snare.wav",
+  keyj: "sounds/brazilian-funk-perc-steel-pan_130bpm_C.wav",
   keyk: "sounds/brazilian-funk-cowbell_C.wav",
   keyl: "sounds/jama-type-brazilian-funk-cowbell_146bpm_B_major.wav",
 };
