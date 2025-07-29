@@ -820,3 +820,10 @@ export {
   Visualizer,
   KeyMappingManager,
 };
+
+// Botão para mostrar/esconder painel de customização
+document.getElementById("customizeKeysBtn").addEventListener("click", () => {
+  const panel = document.getElementById("customizationPanel");
+  const isVisible = panel.style.display === "block";
+  panel.style.display = isVisible ? "none" : "block";
+});

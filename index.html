@@ -113,15 +113,19 @@
       aria-label="Visualizador de áudio"
     ></canvas>
 
-    <section class="key-mapping-section">
-      <h2>Customizar Mapeamento de Teclas</h2>
-      <div id="key-mapping-controls">
-        <!-- Conteúdo gerado dinamicamente via JS -->
-      </div>
-      <button id="save-key-mapping-btn">Salvar Mapeamento</button>
-      <button id="reset-key-mapping-btn">Resetar Mapeamento</button>
-    </section>
-
+    <div class="custom-area" st>
+      <button id="customizeKeysBtn"><span>🎹</span> Customizar Teclas</button>
+    </div>
+    <div id="customizationPanel" style="display: none">
+      <section class="key-mapping-section">
+        <h2>Customizar Mapeamento de Teclas</h2>
+        <div id="key-mapping-controls">
+          <!-- Conteúdo gerado dinamicamente via JS -->
+        </div>
+        <button id="save-key-mapping-btn">Salvar Mapeamento</button>
+        <button id="reset-key-mapping-btn">Resetar Mapeamento</button>
+      </section>
+    </div>
     <footer>
       <p>
         Direitos reservados

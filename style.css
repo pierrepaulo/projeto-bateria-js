@@ -330,9 +330,7 @@ header h1 {
 
 #key-mapping-controls {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: var(--gap-small);
-  margin-bottom: var(--gap-medium);
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .key-mapping-item {
@@ -532,4 +530,36 @@ footer a {
     animation: none;
     transform: none;
   }
+}
+
+.custom-area {
+  margin-top: 20px;
+}
+
+#customizeKeysBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 10px;
+  border: 2px solid #555;
+  background-color: #1e1e1e;
+  color: #00c8ff;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease-in-out;
+}
+
+#customizeKeysBtn:hover {
+  background-color: #2c2c2c;
+  box-shadow: 0 0 15px rgba(0, 200, 255, 0.3);
+  color: #fff;
+}
+
+#customizeKeysBtn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 8px rgba(0, 200, 255, 0.2);
 }
